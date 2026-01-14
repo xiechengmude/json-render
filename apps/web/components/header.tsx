@@ -14,12 +14,6 @@ export function Header() {
           >
             Docs
           </Link>
-          <Link
-            href="/playground"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Playground
-          </Link>
           <a
             href="https://github.com/vercel-labs/json-render"
             target="_blank"

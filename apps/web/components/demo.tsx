@@ -113,17 +113,6 @@ export function Demo() {
     return () => clearInterval(interval);
   }, [phase]);
 
-  // Auto-restart
-  useEffect(() => {
-    if (phase !== "complete") return;
-
-    const timeout = setTimeout(() => {
-      reset();
-    }, 8000);
-
-    return () => clearTimeout(timeout);
-  }, [phase, reset]);
-
   const handleAction = () => {
     setActionFired(true);
     setTimeout(() => setActionFired(false), 2000);

@@ -157,14 +157,9 @@ export const catalog = createCatalog({
           <pre className="inline-block text-left mb-8 text-sm">
             <code>npm install @json-render/core @json-render/react</code>
           </pre>
-          <div className="flex gap-3 justify-center">
-            <Button asChild>
-              <Link href="/docs">Documentation</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href="/playground">Playground</Link>
-            </Button>
-          </div>
+          <Button asChild>
+            <Link href="/docs">Documentation</Link>
+          </Button>
         </div>
       </section>
     </>
