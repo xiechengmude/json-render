@@ -1,7 +1,29 @@
 import { streamText } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
 import { componentList } from "@/lib/catalog";
 
-export const maxDuration = 30;
+export const maxDuration = 60;
+
+// 创建 LiteLLM Proxy 兼容的 OpenAI provider
+const litellm = createOpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  baseURL: process.env.OPENAI_BASE_URL,
+});
+
+// 可用模型映射
+const MODEL_MAP: Record<string, string> = {
+  opus: "cc-opus-4-5-20251101",
+  sonnet: "cc-sonnet-4-5-20250929",
+  haiku: "cc-haiku-4-5-20251001",
+  "ds3.2": "Pro/deepseek-ai/DeepSeek-V3.2",
+  deepseek: "deepseek-chat",
+  "deepseek-r1": "deepseek-reasoner",
+  glm: "GLM-4.7",
+  kimi: "kimi-k2-1",
+  qwen: "qwen3-235B-A22B",
+};
+
+const DEFAULT_MODEL = process.env.DEFAULT_MODEL || "cc-opus-4-5-20251101";
 
 const SYSTEM_PROMPT = `You are a dashboard widget generator that outputs JSONL (JSON Lines) patches.
 
@@ -61,6 +83,11 @@ Generate JSONL patches now:`;
 export async function POST(req: Request) {
   const { prompt, context } = await req.json();
 
+  // 从 context 中解析模型名称
+  const requestedModel = context?.model;
+  const modelKey = requestedModel?.toLowerCase() || "";
+  const modelName = MODEL_MAP[modelKey] || requestedModel || DEFAULT_MODEL;
+
   let fullPrompt = prompt;
 
   // Add data context
@@ -68,8 +95,10 @@ export async function POST(req: Request) {
     fullPrompt += `\n\nAVAILABLE DATA:\n${JSON.stringify(context.data, null, 2)}`;
   }
 
+  console.log(`[generate] Using model: ${modelName}`);
+
   const result = streamText({
-    model: "anthropic/claude-opus-4.5",
+    model: litellm(modelName),
     system: SYSTEM_PROMPT,
     prompt: fullPrompt,
     temperature: 0.7,

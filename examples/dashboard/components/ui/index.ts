@@ -16,6 +16,14 @@ export { Table } from "./table";
 export { Text } from "./text";
 export { TextField } from "./text-field";
 
+// Stock Market Components
+export { CandlestickChart } from "./candlestick-chart";
+export { OrderBook } from "./order-book";
+export { StockQuote } from "./stock-quote";
+export { MiniChart } from "./mini-chart";
+export { TickerTape } from "./ticker-tape";
+export { PriceAlert } from "./price-alert";
+
 import { Alert } from "./alert";
 import { Badge } from "./badge";
 import { Button } from "./button";
@@ -33,6 +41,14 @@ import { Stack } from "./stack";
 import { Table } from "./table";
 import { Text } from "./text";
 import { TextField } from "./text-field";
+
+// Stock Market Components
+import { CandlestickChart } from "./candlestick-chart";
+import { OrderBook } from "./order-book";
+import { StockQuote } from "./stock-quote";
+import { MiniChart } from "./mini-chart";
+import { TickerTape } from "./ticker-tape";
+import { PriceAlert } from "./price-alert";
 
 export const componentRegistry = {
   Alert,
@@ -52,4 +68,11 @@ export const componentRegistry = {
   Table,
   Text,
   TextField,
+  // Stock Market Components
+  CandlestickChart,
+  OrderBook,
+  StockQuote,
+  MiniChart,
+  TickerTape,
+  PriceAlert,
 };

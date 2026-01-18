@@ -67,8 +67,19 @@ const ACTION_HANDLERS = {
   apply_filter: () => alert("Applying filters..."),
 };
 
+const MODELS = [
+  { value: "opus", label: "Claude Opus 4.5" },
+  { value: "ds3.2", label: "DeepSeek V3.2" },
+  { value: "glm", label: "GLM 4.7" },
+  { value: "sonnet", label: "Claude Sonnet" },
+  { value: "deepseek", label: "DeepSeek Chat" },
+  { value: "kimi", label: "Kimi K2" },
+  { value: "qwen", label: "Qwen 235B" },
+];
+
 function DashboardContent() {
   const [prompt, setPrompt] = useState("");
+  const [model, setModel] = useState("opus");
   const { tree, isStreaming, error, send, clear } = useUIStream({
     api: "/api/generate",
     onError: (err) => console.error("Generation error:", err),
@@ -78,9 +89,9 @@ function DashboardContent() {
     async (e: React.FormEvent) => {
       e.preventDefault();
       if (!prompt.trim()) return;
-      await send(prompt, { data: INITIAL_DATA });
+      await send(prompt, { data: INITIAL_DATA, model });
     },
-    [prompt, send],
+    [prompt, send, model],
   );
 
   const examples = [
@@ -111,6 +122,27 @@ function DashboardContent() {
 
       <form onSubmit={handleSubmit} style={{ marginBottom: 32 }}>
         <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+          <select
+            value={model}
+            onChange={(e) => setModel(e.target.value)}
+            disabled={isStreaming}
+            style={{
+              padding: "12px 16px",
+              background: "var(--card)",
+              border: "1px solid var(--border)",
+              borderRadius: "var(--radius)",
+              color: "var(--foreground)",
+              fontSize: 14,
+              outline: "none",
+              minWidth: 160,
+            }}
+          >
+            {MODELS.map((m) => (
+              <option key={m.value} value={m.value}>
+                {m.label}
+              </option>
+            ))}
+          </select>
           <input
             type="text"
             value={prompt}

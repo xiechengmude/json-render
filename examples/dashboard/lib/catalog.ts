@@ -182,12 +182,94 @@ export const dashboardCatalog = createCatalog({
       }),
       description: "Empty state placeholder",
     },
+
+    // ========== Stock Market Components ==========
+
+    CandlestickChart: {
+      props: z.object({
+        dataPath: z.string(),
+        title: z.string().nullable(),
+        height: z.number().nullable(),
+        showVolume: z.boolean().nullable(),
+        showMA: z.array(z.number()).nullable(), // e.g. [5, 10, 20] for MA5, MA10, MA20
+        period: z
+          .enum(["1m", "5m", "15m", "30m", "1h", "1d", "1w", "1M"])
+          .nullable(),
+      }),
+      description:
+        "K-line candlestick chart with optional volume and moving averages",
+    },
+
+    OrderBook: {
+      props: z.object({
+        bidsPath: z.string(),
+        asksPath: z.string(),
+        levels: z.number().nullable(), // default 5
+        showTotal: z.boolean().nullable(),
+        priceDecimals: z.number().nullable(),
+      }),
+      description: "Order book showing bid/ask levels (买卖五档盘口)",
+    },
+
+    StockQuote: {
+      props: z.object({
+        symbolPath: z.string(),
+        namePath: z.string(),
+        pricePath: z.string(),
+        changePath: z.string(),
+        changePercentPath: z.string(),
+        volumePath: z.string().nullable(),
+        showSparkline: z.boolean().nullable(),
+        sparklineDataPath: z.string().nullable(),
+      }),
+      description: "Compact stock quote display with price and change",
+    },
+
+    MiniChart: {
+      props: z.object({
+        dataPath: z.string(),
+        type: z.enum(["line", "area", "bar"]).nullable(),
+        color: z.enum(["green", "red", "blue", "gray"]).nullable(),
+        width: z.number().nullable(),
+        height: z.number().nullable(),
+      }),
+      description: "Mini sparkline chart for inline display",
+    },
+
+    TickerTape: {
+      props: z.object({
+        dataPath: z.string(),
+        speed: z.enum(["slow", "normal", "fast"]).nullable(),
+        showChange: z.boolean().nullable(),
+      }),
+      description: "Scrolling stock ticker tape",
+    },
+
+    PriceAlert: {
+      props: z.object({
+        symbolPath: z.string(),
+        pricePath: z.string(),
+        targetPath: z.string(),
+        conditionPath: z.string(), // "above" | "below"
+        messagePath: z.string(),
+        severity: z.enum(["info", "warning", "danger"]).nullable(),
+      }),
+      description: "Price alert notification with target and condition",
+    },
   },
   actions: {
     export_report: { description: "Export the current dashboard to PDF" },
     refresh_data: { description: "Refresh all metrics and charts" },
     view_details: { description: "View detailed information" },
     apply_filter: { description: "Apply the current filter settings" },
+    // Stock Market Actions
+    add_to_watchlist: { description: "Add stock to watchlist" },
+    remove_from_watchlist: { description: "Remove stock from watchlist" },
+    set_price_alert: { description: "Set a price alert for a stock" },
+    buy_stock: { description: "Execute buy order" },
+    sell_stock: { description: "Execute sell order" },
+    change_period: { description: "Change chart time period" },
+    toggle_indicator: { description: "Toggle technical indicator" },
   },
   validation: "strict",
 });
